@@ -18,6 +18,9 @@ def load_tokenized_dataset(tokenizer, data_style, train_dataset, max_length=512)
         def tokenize_function(examples):
             converted_examples = []
             for idx in range(len(examples['instruction'])):
+                if len(examples['instruction'][idx]) <5:
+                    continue
+                
                 text = ''
                 text += f"<s> [INST] {examples['instruction'][idx]} {examples['input'][idx]} [/INST]\n"
                 text += f"{examples['output'][idx]} \n </s>"

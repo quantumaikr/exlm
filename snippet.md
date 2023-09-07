@@ -2,11 +2,12 @@
 
 ## 환경 설치 관련
 
-!git clone https://github.com/quantumaikr/ezlm
+!git clone https://github.com/quantumaikr/exlm
 
 !pip install -r requirements.txt
 
 !pip install -q accelerate==0.21.0 peft==0.4.0 bitsandbytes==0.40.2 transformers==4.31.0 trl==0.4.7 scipy deepspeed
+!pip install -q accelerate peft bitsandbytes transformers trl scipy deepspeed
 
 !chmod +x install.sh | ./install.sh
 

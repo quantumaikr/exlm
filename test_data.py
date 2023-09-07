@@ -17,7 +17,7 @@ def main(
     model = TigerForCausalLM.from_pretrained(base_model, cache_dir="hub", device_map="auto")
     
     
-    train_dataset = load_dataset('junelee/sharegpt_deepl_ko', data_files='ko_alpaca_style_dataset.json', split="train[:2]", cache_dir="hub")
+    train_dataset = load_dataset('junelee/sharegpt_deepl_ko', data_files='ko_alpaca_style_dataset.json', split="train[:1000]", cache_dir="hub")
     train_dataset = load_tokenized_dataset(tokenizer, 'alpaca', train_dataset)
 
     print(train_dataset)

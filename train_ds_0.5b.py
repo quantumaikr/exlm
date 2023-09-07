@@ -27,10 +27,10 @@ def main(
     # train_dataset = load_tokenized_dataset(tokenizer, 'alpaca', train_dataset)
     
     # train_dataset = load_dataset('FreedomIntelligence/alpaca-gpt4-korean', split="train[:]", cache_dir="hub")
-    # train_dataset = load_tokenized_dataset(tokenizer, 'alpaca', train_dataset)
+    # train_dataset = load_tokenized_dataset(tokenizer, 'wizard', train_dataset)
     
     train_dataset = load_dataset('nlpai-lab/kullm-v2', split="train[:]", cache_dir="hub")
-    train_dataset = load_tokenized_dataset(tokenizer, 'instruction', train_dataset)
+    train_dataset = load_tokenized_dataset(tokenizer, 'alpaca', train_dataset)
 
     # train_dataset = load_dataset("lcw99/wikipedia-korean-20221001", split="train[:2]", cache_dir="hub")
     # train_dataset = load_tokenized_dataset(tokenizer, 'kwiki', train_dataset)
