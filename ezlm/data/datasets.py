@@ -8,11 +8,11 @@ def load_tokenized_dataset(tokenizer, data_style, train_dataset, max_length=512)
                             return_overflowing_tokens=True,
                             truncation=True, max_length=max_length, stride=10, return_offsets_mapping=True)
         
-        train_dataset_mapped = train_dataset.map(
-            tokenize_function,
-            batched=True,
-            remove_columns=["id", "url", "title", "text"]
-        )
+        # train_dataset_mapped = train_dataset.map(
+        #     tokenize_function,
+        #     batched=True,
+        #     remove_columns=["id", "url", "title", "text"]
+        # )
 
     if data_style == "alpaca":
         def tokenize_function(examples):
@@ -31,11 +31,11 @@ def load_tokenized_dataset(tokenizer, data_style, train_dataset, max_length=512)
                      return_overflowing_tokens=True,
                      truncation=True, max_length=max_length, stride=10)
         
-        train_dataset_mapped = train_dataset.map(
-            tokenize_function,
-            batched=True,
-            remove_columns=['instruction', 'input', 'output']
-        )
+        # train_dataset_mapped = train_dataset.map(
+        #     tokenize_function,
+        #     batched=True,
+        #     remove_columns=['instruction', 'input', 'output']
+        # )
 
     if data_style == "wizard":
         train_dataset = train_dataset.remove_columns(['id'])
@@ -57,12 +57,18 @@ def load_tokenized_dataset(tokenizer, data_style, train_dataset, max_length=512)
                      truncation=True, max_length=max_length, stride=10)
 
     
-        train_dataset_mapped = train_dataset.map(
-            tokenize_function,
-            batched=True,
-            remove_columns=['conversations']
-        )
+        # train_dataset_mapped = train_dataset.map(
+        #     tokenize_function,
+        #     batched=True,
+        #     remove_columns=['conversations']
+        # )
     
+    columns = list(train_dataset.features.keys())
+    train_dataset_mapped = train_dataset.map(
+        tokenize_function,
+        batched=True,
+        remove_columns=columns
+    )
     return train_dataset_mapped
     
 
