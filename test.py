@@ -1,5 +1,5 @@
 from ezlm import TigerConfig, TigerForCausalLM, TigerTokenizer
-from ezlm import load_tokenized_dataset
+from ezlm import load_tokenized_dataset, print_model_size
 from ezlm.variables import *
 
 from datasets import load_dataset
@@ -8,15 +8,25 @@ import fire
 from transformers import DataCollatorForLanguageModeling
 from transformers import Trainer, TrainingArguments
 
+from transformers import LlamaTokenizer, AutoTokenizer
+
 
 def main(
         base_model: str = 'quantumaikr/tiger-0.5b' 
     ):
 
+    
+    tokenizer = AutoTokenizer.from_pretrained('korean_tokenizer')
+    print(tokenizer.encode("대한민국 국민"))
+
+    # tokenizer.save_pretrained('korean_tokenizer')
+
+    exit()
     tokenizer = TigerTokenizer.from_pretrained(base_model)
     model = TigerForCausalLM.from_pretrained(base_model, cache_dir="hub", device_map="auto")
-    
-    
+
+    # print_model_size(model)
+
     train_dataset = load_dataset('junelee/sharegpt_deepl_ko', data_files='ko_alpaca_style_dataset.json', split="train[:]", cache_dir="hub")
     train_dataset = load_tokenized_dataset(tokenizer, 'alpaca', train_dataset)
     

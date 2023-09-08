@@ -4,3 +4,5 @@ venv
 hub
 result
 tmp_trainer
+korean_tokenizer
+test_tokenizer
