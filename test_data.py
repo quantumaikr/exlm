@@ -23,7 +23,8 @@ def main(
     train_dataset = load_dataset('nlpai-lab/kullm-v2', split="train[:10000]", cache_dir="hub")
     train_dataset = load_tokenized_dataset(tokenizer, 'alpaca', train_dataset)
 
-    print(train_dataset)
+    for item in train_dataset:
+        print(len(item['input_ids']))
     
     
     # # 훈련 시작

@@ -12,7 +12,7 @@ def load_tokenized_dataset(tokenizer, data_style, train_dataset, max_length=512)
         def tokenize_function(examples):
             converted_examples = []
             for idx in range(len(examples['instruction'])):
-                if len(examples['instruction'][idx] or  examples['output'][idx]) <10:
+                if len(examples['instruction'][idx]) < 10 or len(examples['output'][idx]) < 10:
                     continue
                 
                 text = ''
