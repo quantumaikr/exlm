@@ -10,9 +10,9 @@ from transformers import Trainer, TrainingArguments
 from transformers import AutoTokenizer
 
 
-base_model = 'quantumaikr/plankton-500M'
+base_model = 'quantumaikr/plankton-1B'
 tokenizer = AutoTokenizer.from_pretrained('quantumaikr/plankton_tokenizer')
-model = PlanktonForCausalLM.from_pretrained(base_model, cache_dir="hub", device_map="auto")
+model = PlanktonForCausalLM.from_pretrained(base_model, cache_dir="hub")
 
 
 train_dataset = load_dataset("lcw99/wikipedia-korean-20221001", split="train[:1000]", cache_dir="hub")
@@ -44,6 +44,8 @@ train_args = TrainingArguments(
     save_strategy='steps',
     save_safetensors=True,
     save_total_limit=1,
+    deepspeed=ZERO_2_SETTINGS,
+    # deepspeed=ZERO_3_SETTINGS
 )
 
 trainer = Trainer(
@@ -54,5 +56,5 @@ trainer = Trainer(
 )
 
 trainer.train()
-trainer.model.save_pretrained('plankton-500M')
-trainer.model.push_to_hub('plankton-500M')
+trainer.model.save_pretrained('plankton-1B')
+trainer.model.push_to_hub('plankton-1B')
