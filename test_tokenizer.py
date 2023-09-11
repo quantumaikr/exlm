@@ -1,49 +1,21 @@
-from ezlm import TigerConfig, TigerForCausalLM, TigerTokenizer
-# from ezlm import load_dataset
-from ezlm.variables import *
+from transformers import PreTrainedTokenizerFast, AutoTokenizer
 
-from datasets import load_dataset
-
-tokenizer = TigerTokenizer.from_pretrained('quantumaikr/tiger-0.5b')
-
-# sentences = [
-#     "대한민국 국민 대한민국 국민 대한민국 국민 대한민국 국민",
-#     "대한민국 국민 대한민국 국민 대한민국 국민 대한민국 국민"
-# ]
-# inputs = tokenizer(
-#     sentences, truncation=True, return_overflowing_tokens=True, max_length=3, stride=1
-# )
-
-# print('inputs', len(inputs['input_ids']))
-# print('inputs', inputs)
+tokenizer = PreTrainedTokenizerFast.from_pretrained('custom_tokenizer')
 
 
-train_dataset = load_dataset('FreedomIntelligence/alpaca-gpt4-korean', split="train[:2]")  
-train_dataset = train_dataset.remove_columns(['id'])
+tokenizer.bos_token_id = tokenizer.convert_tokens_to_ids('<s>')
+tokenizer.eos_token_id = tokenizer.convert_tokens_to_ids('</s>')
+tokenizer.unk_token_id = tokenizer.convert_tokens_to_ids('<unk>')
+tokenizer.pad_token_id = tokenizer.convert_tokens_to_ids('<pad>')
 
-def tokenize_function(examples):
-    converted_examples = []
-    for conversations in examples["conversations"]:
-        text = ''
-        for item in conversations:
-            if item['from'] == "human":
-                text += f"<s> [INST] {item['value']} [/INST]\n"
-            else:
-                text += f"{item['value']} \n </s>"
+tokenizer.save_pretrained('custom_tokenizer')
 
-        converted_examples.append(text)
 
-    return tokenizer(converted_examples, padding=False,
-                return_overflowing_tokens=True,
-                truncation=True, max_length=20, stride=2)
-    # return tokenizer(converted_examples)
+# new_tokenizer = AutoTokenizer.from_pretrained('custom_tokenizer')
+# print(new_tokenizer.bos_token_id)
 
-train_dataset_mapped = train_dataset.map(
-    tokenize_function,
-    batched=True,
-    remove_columns=['conversations']
-)
+# # new_tokenizer.save_pretrained('korean_tokenizer')
 
-print('train_dataset_mapped', train_dataset_mapped)
-# print('train_dataset_mapped', len(train_dataset_mapped['input_ids']))
-# print('train_dataset_mapped', len(train_dataset_mapped[0]['input_ids']))
+print(tokenizer.pad_token_id)
+
+# print(tokenizer.encode("대한민국 국민"))

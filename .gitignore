@@ -7,3 +7,5 @@ result
 tmp_trainer
 korean_tokenizer
 test_tokenizer
+custom_tokenizer
+plankton-1B
