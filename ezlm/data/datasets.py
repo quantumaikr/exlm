@@ -1,4 +1,4 @@
-
+import re
 
 def load_tokenized_dataset(tokenizer, data_style, train_dataset, max_length=512):
     train_dataset_mapped = None
@@ -48,6 +48,31 @@ def load_tokenized_dataset(tokenizer, data_style, train_dataset, max_length=512)
                      return_overflowing_tokens=True,
                      truncation=True, max_length=max_length, stride=10)
 
+    if data_style == "account":
+        def tokenize_function(examples):
+            converted_examples = []
+            for item in examples['text']:
+                # 주어진 text에서 [질의]와 [회신] 사이의 내용을 추출합니다.
+                query_match = re.search(r"\[질의\]\s*\n(.*?)(?=\[회신\])", item, re.DOTALL)
+                answer_match = re.search(r"\[회신\]\s*\n(.*?)(?=\[관련 회계기준\])", item, re.DOTALL)
+
+                text = ''
+                if query_match and answer_match:
+                    query = query_match.group(1).strip()
+                    answer = answer_match.group(1).strip()
+
+                    text += f"<s> [INST] {query} [/INST]\n"
+                    text += f"{answer} \n </s>"
+                    
+                else:
+                    print("Couldn't extract query and answer from the text.")
+                
+                converted_examples.append(text)
+
+            return tokenizer(converted_examples, padding=False,
+                     return_overflowing_tokens=True,
+                     truncation=True, max_length=max_length, stride=10)
+
     columns = list(train_dataset.features.keys())
     train_dataset_mapped = train_dataset.map(
         tokenize_function,
@@ -55,6 +80,4 @@ def load_tokenized_dataset(tokenizer, data_style, train_dataset, max_length=512)
         remove_columns=columns
     )
     return train_dataset_mapped
-    
-
     
